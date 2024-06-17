@@ -20,18 +20,15 @@ void setup() {
 }
 
 void loop() {
-  
-forward();
-delay(1000);
-free();
-delay(1000);
-back();
-delay(1000);
-brake();
-delay(1000);
+
 right();
-delay(1000);
+delay(2000);
+brake();
+delay(500);
 left();
+delay(2000);
+brake();
+delay(500);
 }
 
 void forward(){
