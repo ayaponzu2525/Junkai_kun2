@@ -9,6 +9,8 @@ void forward();
 void free();
 void back();
 void brake();
+void right();
+void left();
 
 void setup() {
   pinMode( mt1Pin1, OUTPUT );
@@ -27,6 +29,9 @@ back();
 delay(1000);
 brake();
 delay(1000);
+right();
+delay(1000);
+left();
 }
 
 void forward(){
@@ -55,5 +60,19 @@ void brake(){
   analogWrite( mt1Pin2, 255 );
   analogWrite( mt2Pin1, 255 );
   analogWrite( mt2Pin2, 255 );
+}
+
+void right(){
+  analogWrite( mt1Pin1, 255 );
+  analogWrite( mt1Pin2, 0 );
+  analogWrite( mt2Pin1, 0 );
+  analogWrite( mt2Pin2, 255 );
+}
+
+void left(){
+  analogWrite( mt1Pin1, 0 );
+  analogWrite( mt1Pin2, 255 );
+  analogWrite( mt2Pin1, 255 );
+  analogWrite( mt2Pin2, 0 );
 }
 
