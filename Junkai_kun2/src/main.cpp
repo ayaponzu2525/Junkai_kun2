@@ -12,6 +12,7 @@ void forward();
 void back();
 void right();
 void left();
+void brake();
 
 void setup() {
   pinMode( mt1Dir, OUTPUT );
@@ -53,4 +54,9 @@ void left(){
 
     analogWrite(mt1Pwm, 255);
     analogWrite(mt2Pwm, 255);
+}
+
+void brake(){
+    analogWrite(mt1Pwm, 255);
+    analogWrite(mt2Pwm, 255); 
 }
