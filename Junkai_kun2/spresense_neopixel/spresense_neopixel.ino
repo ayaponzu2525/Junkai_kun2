@@ -2,14 +2,14 @@
 #include <SPI_NeoPixel.h>
 //https://github.com/lipoyang/SPI_NeoPixel
 
-const uint16_t NUM_PIXELS = 42;
+const uint16_t NUM_PIXELS = 39;
 //spiの送信のピン　= 11
 
 SPI_NeoPixel neopixel(NUM_PIXELS);
 
-int rightturn_sig[] = {6,7,8,9,10,11,12,13,14,15};  // 同時に点滅させるLEDのインデックスの配列（右）
+int rightturn_sig[] = {4,5,6,7,8,9,10,11,12};  // 同時に点滅させるLEDのインデックスの配列（右）
 int rightturn_leds = sizeof(rightturn_sig) / sizeof(rightturn_sig[0]);  // 配列の要素数を計算
-int leftturn_sig[] = {26,27,28,29,30,31,32,33,34}; // 同時に点滅させるLEDのインデックスの配列（左）
+int leftturn_sig[] = {25,26,27,28,29,30,31,32}; // 同時に点滅させるLEDのインデックスの配列（左）
 int leftturn_leds = sizeof(leftturn_sig) / sizeof(leftturn_sig[0]);  // 配列の要素数を計算
 
 void setup(){
@@ -23,22 +23,28 @@ void setup(){
 }
 
 void loop(){
-  for (int i=0; i<3; i++){
-    turn_signal(rightturn_sig, rightturn_leds, 0xEE7800, 500);  // 同時に点滅させるLEDをオレンジで点滅させる
+  for (int i=0; i<10; i++){
+    neopixel.setPixelColor(i, 0x00FF00);
+    delay(10);
+    neopixel.show();
   }
-  clearAllLEDs();
+
+  clearPixels(0,39);
+  
+  for (int i=0; i<3; i++){
+    turn_signal(rightturn_sig, rightturn_leds, 0xFF0000, 500);  // 同時に点滅させるLEDを赤で点滅させる
+    
+  }
 
   for (int i=0; i<3; i++){
-    turn_signal(leftturn_sig, leftturn_leds, 0xEE7800, 500);  // 同時に点滅させるLEDをオレンジで点滅させる
+    turn_signal(leftturn_sig, leftturn_leds, 0x00FF00, 500);  // 同時に点滅させるLEDを緑で点滅させる
   }
-  clearAllLEDs();
 
-  delay(1000);  // 1秒待機
+  // LED_in_order(0, 10, 0xDD0000, 500);  // 左端から10番目のLEDを赤で点滅させる
+  // delay(1000);  // 1秒待機
 
   //rainbowCycle(10, 128); // 虹色サイクルを10回繰り返し、最大の明るさを128に設定する
 }
-//loop終わり↑
-
 
 // 特定のLEDを点灯させる関数
 void setPixelColor(int pixelIndex, uint32_t color) {
@@ -60,18 +66,9 @@ void LED_in_order(int startPixel, int length, uint32_t color, int interval) {//(
 
 //複数のLEDを同時に点滅させる(ウィンカー)
 void turn_signal(int *pixelIndices, int numPixels, uint32_t color, int interval) {
-    // デバッグ出力
-    Serial.println("Turn signal start");
-    Serial.print("Number of pixels: ");
-    Serial.println(numPixels);
-
     // LEDを点灯する
     for (int i = 0; i < numPixels; i++) {//numPixelsは配列の要素数を表している。現在はビット数？
-      int ledIndex = pixelIndices[i];
-      Serial.print("Setting LED ");
-      Serial.print(ledIndex);
-      Serial.println(" to ON");
-      setPixelColor(ledIndex, color);
+        setPixelColor(pixelIndices[i], color);
     }
     neopixel.show();  // LEDの表示を更新
 
@@ -79,17 +76,11 @@ void turn_signal(int *pixelIndices, int numPixels, uint32_t color, int interval)
 
     // LEDを消灯する
     for (int i = 0; i < numPixels; i++) {
-      int ledIndex = pixelIndices[i];
-      Serial.print("Setting LED ");
-      Serial.print(ledIndex);
-      Serial.println(" to OFF");
-      setPixelColor(ledIndex, 0);
+        setPixelColor(pixelIndices[i], 0);
     }
     neopixel.show();  // LEDの表示を更新
 
     delay(interval);  // 指定時間待機
-    
-    Serial.println("Turn signal end");
 }
 
 // 特定の範囲のLEDを消す関数
@@ -97,13 +88,6 @@ void clearPixels(int startPixel, int length) {
     for (int i = startPixel; i < startPixel + length; i++) {
         setPixelColor(i % NUM_PIXELS, 0);  // LEDを消す
     }
-}
-
-void clearAllLEDs() {
-  for (int i = 0; i < NUM_PIXELS; i++) { // NUMPIXELSは全LEDの数（この場合は42）
-    setPixelColor(i, 0);
-  }
-  neopixel.show();
 }
 
 
