@@ -1,8 +1,3 @@
-const int pwm3 = 3;
-const int pwm5 = 5;
-const int pwm6 = 6;
-const int pwm9 = 9;
-
 #include <Arduino.h>
 
 const int mt1Dir = 2;
@@ -31,7 +26,11 @@ void setup() {
 }
 
 void loop(){
-    forward();
+  right_clank();
+  delay(1000);
+  left_clank();
+  delay(1000);
+
 }
 
 void forward(){
@@ -64,8 +63,8 @@ void right(){
     digitalWrite(mt1Dir, Ccw);
     digitalWrite(mt2Dir, Ccw);
 
-    analogWrite(mt1Pwm, maxpeed);
-    analogWrite(mt2Pwm, maxpeed);
+    analogWrite(mt1Pwm, maxspeed);
+    analogWrite(mt2Pwm, maxspeed);
 }
 void left(){
     digitalWrite(mt1Dir, Cw);
